@@ -1,0 +1,19 @@
+# see: https://blog.martinhujer.cz/dont-put-idea-vscode-directories-to-projects-gitignore/
+.DS_Store
+.credentials
+/dist
+/build
+/packages
+/release
+*_string.go
+.glide
+vendor
+/glide
+/package
+/stage
+coverage.txt
+.ctags
+bin/
+
+# direnv
+.envrc
