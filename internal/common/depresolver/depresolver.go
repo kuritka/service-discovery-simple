@@ -19,7 +19,7 @@ const (
 )
 
 type DepResolver struct {
-	listener struct {
+	discovery struct {
 		initOnce sync.Once
 		settings discovery.Settings
 	}
@@ -32,17 +32,17 @@ func New() *DepResolver {
 
 func (dr *DepResolver) MustResolveDiscovery() (s discovery.Settings, err error) {
 	var e *multierror.Error
-	dr.listener.initOnce.Do(func() {
+	dr.discovery.initOnce.Do(func() {
 		// resolve and validate all inputs here!
-		dr.listener.settings.Port, err = env.GetEnvAsIntOrFallback(envPortKey, common.DefaultServicePort)
+		dr.discovery.settings.Port, err = env.GetEnvAsIntOrFallback(envPortKey, common.DefaultServicePort)
 		e = multierror.Append(e, err)
 
 		yamlURL := env.GetEnvAsStringOrFallback(envYamlKey, common.InvalidYamlURL)
 		if yamlURL == common.InvalidYamlURL {
 			e = multierror.Append(e, fmt.Errorf("invalid %s", envYamlKey))
 		}
-		dr.listener.settings.YamlURL, err = url.Parse(yamlURL)
+		dr.discovery.settings.YamlURL, err = url.Parse(yamlURL)
 		e = multierror.Append(e, err)
 	})
-	return dr.listener.settings, e.ErrorOrNil()
+	return dr.discovery.settings, e.ErrorOrNil()
 }

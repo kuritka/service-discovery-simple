@@ -4,8 +4,10 @@ import (
 	"net/http"
 	"net/url"
 
+	"github.com/kuritka/k8gb-discovery/internal/common/log"
+	"github.com/kuritka/k8gb-discovery/internal/services/discovery/internal/cache"
+
 	"github.com/julienschmidt/httprouter"
-	"github.com/kuritka/k8gb-discovery/internal/services/discovery/internal/disco"
 )
 
 var router *httprouter.Router
@@ -15,23 +17,29 @@ func init() {
 }
 
 type DiscoController struct {
-	d *disco.Disco
+	cache *cache.Cache
 }
 
-func Startup(yamlURL *url.URL) *DiscoController {
-	ctrl := &DiscoController{
-		d: disco.NewDisco(yamlURL),
+func Startup(yamlURL *url.URL) (ctrl *DiscoController, err error) {
+	ctrl = &DiscoController{
+		cache: cache.NewCache(yamlURL),
 	}
-	ctrl.register()
-	return ctrl
+	ctrl.registerRoutes()
+	log.Logger().Infof("fetching configuration from %s", yamlURL.String())
+	err = ctrl.cache.RestoreCache()
+	if err != nil {
+		return nil, err
+	}
+	log.Logger().Infof("done")
+	return
 }
 
 func (c *DiscoController) Router() *httprouter.Router {
 	return router
 }
 
-func (c *DiscoController) register() {
-	// register routes here
+func (c *DiscoController) registerRoutes() {
+	// registerRoutes routes here
 	router.GET("/healthy", c.handleHealthy)
 	router.GET("/disco", c.handleDiscovery)
 }

@@ -24,7 +24,10 @@ func New(ctx context.Context, settings Settings) *Listener {
 
 func (l *Listener) Run() (err error) {
 	runtime.GOMAXPROCS(4)
-	c := controller.Startup(l.settings.YamlURL)
+	c,err  := controller.Startup(l.settings.YamlURL)
+	if err != nil {
+		return
+	}
 	log.Logger().Infof("listening on :%d", l.settings.Port)
 	err = http.ListenAndServe(fmt.Sprintf(":%d", l.settings.Port), c.Router())
 

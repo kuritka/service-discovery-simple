@@ -3,13 +3,17 @@ package imports
 
 import (
 	_ "context"
+	_ "fmt"
 	_ "net/http"
+	_ "net/url"
 	_ "os"
 	_ "runtime"
 	_ "strconv"
 	_ "sync"
+	_ "time"
 
 	_ "github.com/AbsaOSS/gopkg/env"
+	_ "github.com/hashicorp/go-multierror"
 	_ "github.com/julienschmidt/httprouter"
 	_ "github.com/sirupsen/logrus"
 	_ "github.com/spf13/cobra"
