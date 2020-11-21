@@ -1,9 +1,13 @@
-package listener
+package discovery
 
 import (
 	"context"
+	"fmt"
+	"net/http"
+	"runtime"
 
 	"github.com/kuritka/k8gb-discovery/internal/common/log"
+	"github.com/kuritka/k8gb-discovery/internal/services/discovery/internal/controller"
 )
 
 type Listener struct {
@@ -19,17 +23,19 @@ func New(ctx context.Context, settings Settings) *Listener {
 }
 
 func (l *Listener) Run() (err error) {
-	log.Logger().Info("hello from listener uhkhghgkj")
+	runtime.GOMAXPROCS(4)
+	c := controller.Startup(l.settings.YamlURL)
+	log.Logger().Infof("listening on :%d", l.settings.Port)
+	err = http.ListenAndServe(fmt.Sprintf(":%d", l.settings.Port), c.Router())
+
 	// TODO: create cache from github
 	// TODO: Listener providing DATA. What about controller ?
 	// TODO: Tests
-	// TODO: create repo with one file only (will be internal)
 	// TODO: channels ?? Look to proxy..
 	// TODO: define ingress, service, pod, certmanager with kustomize ??
-	// TODO: heath endpoint
-	// TODO: cache jurnal by endpoint
+	// TODO: cache journal by endpoint, isn't enough one endpoint ?
 	// Consult with Yury, Tim ...
-	return nil
+	return
 }
 
 func (l *Listener) String() string {
