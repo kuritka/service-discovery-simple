@@ -2,7 +2,8 @@ package listener
 
 import (
 	"context"
-	"fmt"
+
+	"github.com/kuritka/k8gb-discovery/internal/common/log"
 )
 
 type Listener struct {
@@ -18,7 +19,16 @@ func New(ctx context.Context, settings Settings) *Listener {
 }
 
 func (l *Listener) Run() (err error) {
-	fmt.Println("hello from listener", l.settings.Port)
+	log.Logger().Info("hello from listener uhkhghgkj")
+	// TODO: create cache from github
+	// TODO: Listener providing DATA. What about controller ?
+	// TODO: Tests
+	// TODO: create repo with one file only (will be internal)
+	// TODO: channels ?? Look to proxy..
+	// TODO: define ingress, service, pod, certmanager with kustomize ??
+	// TODO: heath endpoint
+	// TODO: cache jurnal by endpoint
+	// Consult with Yury, Tim ...
 	return nil
 }
 

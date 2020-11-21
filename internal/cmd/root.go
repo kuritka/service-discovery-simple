@@ -3,14 +3,11 @@
 package cmd
 
 import (
-	"fmt"
 	"os"
 
-	"github.com/kuritka/k8gb-discovery/internal/common"
-	"github.com/kuritka/k8gb-discovery/internal/common/guard"
+	"github.com/kuritka/k8gb-discovery/internal/common/log"
 
-	"github.com/enescakir/emoji"
-	"github.com/logrusorgru/aurora"
+	"github.com/kuritka/k8gb-discovery/internal/common"
 	"github.com/spf13/cobra"
 )
 
@@ -23,13 +20,13 @@ var rootCmd = &cobra.Command{
 	Short: "k8gb discovery",
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) == 0 {
-			guard.Message("No parameters included")
+			log.Logger().Info("No parameters included")
 			_ = cmd.Help()
 			os.Exit(0)
 		}
 	},
 	PersistentPostRun: func(cmd *cobra.Command, args []string) {
-		fmt.Printf("\n Not sure what to do %s? check out %s! %s\n", aurora.BrightGreen("next"), aurora.BrightBlue(common.HomeURL), emoji.BeachWithUmbrella)
+		log.Logger().Info("Not sure what to do next? check out ", common.HomeURL)
 	},
 }
 
