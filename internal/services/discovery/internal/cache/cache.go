@@ -31,11 +31,10 @@ type K8gb struct {
 	IngressNamespace string   `yaml:"ingressNamespace"`
 }
 
-
 func NewCache(yaml *url.URL) *Cache {
 	return &Cache{
 		yaml:         yaml,
-		cache: make(map[string]K8gb),
+		cache:        make(map[string]K8gb),
 		validFrom:    time.Now(),
 		duration:     time.Hour,
 		refreshCount: 0,
@@ -68,9 +67,7 @@ func (s *Cache) RestoreCache() (err error) {
 	if err != nil {
 		return
 	}
-	return fmt.Errorf("skmfkmnsdf")
-
 	// TODO: refactor large function
 	// TODO: fill rest of fields in cache items
-	//return
+	return
 }

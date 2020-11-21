@@ -24,7 +24,7 @@ func New(ctx context.Context, settings Settings) *Listener {
 
 func (l *Listener) Run() (err error) {
 	runtime.GOMAXPROCS(4)
-	c,err  := controller.Startup(l.settings.YamlURL)
+	c, err := controller.Startup(l.settings.YamlURL)
 	if err != nil {
 		return
 	}
