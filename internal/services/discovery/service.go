@@ -30,12 +30,10 @@ func (l *Listener) Run() (err error) {
 	}
 	log.Logger().Infof("listening on :%d", l.settings.Port)
 	err = http.ListenAndServe(fmt.Sprintf(":%d", l.settings.Port), c.Router())
-
-	// TODO: Listener providing DATA. What about controller ?
 	// TODO: Tests
-	// TODO: channels ?? Look to proxy..
-	// TODO: define ingress, service, pod, certmanager with kustomize ??
-	// Consult with Yury, Tim ...
+	// TODO: channels ?? Look to proxy L7 implementation
+	// TODO: Deployment
+	// TODO: Consult with rest of the team
 	return
 }
 
