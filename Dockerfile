@@ -15,4 +15,3 @@ FROM scratch
 WORKDIR /app
 COPY --from=build /build/k8gb-discovery /app/k8gb-discovery
 ENTRYPOINT ["./k8gb-discovery"]
-

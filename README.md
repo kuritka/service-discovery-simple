@@ -36,3 +36,24 @@ tbd
 | `/discover/:key` | GSLB hits that endpoint to get configuration where key is unique value provided by GSLB |
 | `/restore` | Restores cache from raw YAML (`K8GB_DISCOVERY_YAML_URL`) |
 | `/metrics` | simple metrics |
+
+### example YAML configuration
+```yaml
+test-gslb-us: #can I use unique key for particular k8gb instances ? In the worst case I can combine <cluster>:<namespace>:<instance>
+  clusterGeoTag: us
+  extGslbClustersGeoTags:
+    - eu
+  dnsZone: cloud.example.com
+  ingressNamespace: k8gb
+  edgeDNSZone: example.com
+  edgeDNSServer: 1.1.1.1
+test-gslb-eu:
+  cluster: test-gslb1 # do I need this? isn't enough key e.g. test-gslb-eu
+  clusterGeoTag: eu
+  extGslbClustersGeoTags:
+    - us
+  dnsZone: cloud.example.com
+  ingressNamespace: k8gb
+  edgeDNSZone: example.com
+  edgeDNSServer: 1.1.1.1
+```
