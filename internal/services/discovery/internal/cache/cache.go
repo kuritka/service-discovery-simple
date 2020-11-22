@@ -8,66 +8,72 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/ghodss/yaml"
-	"github.com/kuritka/k8gb-discovery/internal/common/log"
+	"gopkg.in/yaml.v2"
 )
 
 type Cache struct {
-	yaml         *url.URL
-	cache        map[string]K8gb
-	validFrom    time.Time
-	duration     time.Duration
-	refreshCount int
+	info     CacheInfo
+	yamlURL  *url.URL
+	cache    map[string]K8gb
+	duration time.Duration
+}
+
+type CacheInfo struct {
+	ValidFrom    time.Time
+	RefreshCount int
 }
 
 type K8gb struct {
 	LastHit          time.Time
+	ValidFrom        time.Time
 	HitCount         int
-	GeoTag           string   `yaml:"clusterGeoTag"`
-	ExternalGeoTags  []string `yaml:"extGslbClustersGeoTags"`
-	DNSZone          string   `yaml:"dnsZone"`
-	EdgeDNSZone      string   `yaml:"edgeDNSZone"`
-	EdgeDNSServer    string   `yaml:"edgeDNSServer"`
-	IngressNamespace string   `yaml:"ingressNamespace"`
+	GeoTag           string   `yamlURL:"clusterGeoTag"`
+	ExternalGeoTags  []string `yamlURL:"extGslbClustersGeoTags"`
+	DNSZone          string   `yamlURL:"dnsZone"`
+	EdgeDNSZone      string   `yamlURL:"edgeDNSZone"`
+	EdgeDNSServer    string   `yamlURL:"edgeDNSServer"`
+	IngressNamespace string   `yamlURL:"ingressNamespace"`
 }
 
 func NewCache(yaml *url.URL) *Cache {
 	return &Cache{
-		yaml:         yaml,
-		cache:        make(map[string]K8gb),
-		validFrom:    time.Now(),
-		duration:     time.Hour,
-		refreshCount: 0,
+		cache:    make(map[string]K8gb),
+		duration: time.Hour,
+		info: CacheInfo{
+			RefreshCount: 0,
+			ValidFrom:    time.Now(),
+		},
+		yamlURL: yaml,
 	}
 }
 
 func (s *Cache) RestoreCache() (err error) {
+	var t = time.Now()
+	bytes, err := s.getYAML()
+	err = yaml.Unmarshal(bytes, &s.cache)
+	for _, k8gb := range s.cache {
+		k8gb.ValidFrom = t
+	}
+	s.info.RefreshCount++
+	s.info.ValidFrom = t
+	return
+}
+
+func (s *Cache) getYAML() (b []byte, err error) {
 	var client http.Client
 	var resp *http.Response
-	resp, err = client.Get(s.yaml.String())
+	resp, err = client.Get(s.yamlURL.String())
 	if err != nil {
 		return
 	}
-	if resp.StatusCode >= 400 {
-		return fmt.Errorf("%s: %s returns %d", http.MethodGet, s.yaml.String(), resp.StatusCode)
+	if resp.StatusCode >= http.StatusBadRequest {
+		return nil, fmt.Errorf("%s: %s returns %d", http.MethodGet, s.yamlURL.String(), resp.StatusCode)
 	}
-	defer func() {
-		err = resp.Body.Close()
-		if err != nil {
-			log.Logger().Errorf("unable to close response body %s", err.Error())
-		}
-	}()
-
-	var bodyBytes []byte
-	bodyBytes, err = ioutil.ReadAll(resp.Body)
-	if err != nil {
-		return
-	}
-	err = yaml.Unmarshal(bodyBytes, &s.cache)
-	if err != nil {
-		return
-	}
-	// TODO: refactor large function
-	// TODO: fill rest of fields in cache items
+	defer resp.Body.Close()
+	b, err = ioutil.ReadAll(resp.Body)
 	return
+}
+
+func (s *Cache) Info() CacheInfo {
+	return s.info
 }
