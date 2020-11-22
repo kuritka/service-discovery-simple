@@ -12,3 +12,9 @@ list:
 .PHONY: docker-build
 docker-build:
 	time docker build -t k8gb-discovery:$(VERSION) .
+
+.PHONY: clean
+clean:
+	goimports -l -w ./
+	go generate ./...
+	go mod tidy

@@ -26,3 +26,11 @@ func HandleErrorWithInternalServerError(w http.ResponseWriter, r *http.Request, 
 		log.Logger().Errorf("%s: %s", html.EscapeString(r.URL.Path), err.Error())
 	}
 }
+
+func HandleErrorWithNotFound(w http.ResponseWriter, r *http.Request, err error, message string) {
+	if err != nil {
+		_, _ = fmt.Fprintf(w, message)
+		w.WriteHeader(http.StatusNotFound)
+		log.Logger().Errorf("%s: %s", html.EscapeString(r.URL.Path), err.Error())
+	}
+}

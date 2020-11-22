@@ -31,12 +31,10 @@ func (l *Listener) Run() (err error) {
 	log.Logger().Infof("listening on :%d", l.settings.Port)
 	err = http.ListenAndServe(fmt.Sprintf(":%d", l.settings.Port), c.Router())
 
-	// TODO: create cache from github
 	// TODO: Listener providing DATA. What about controller ?
 	// TODO: Tests
 	// TODO: channels ?? Look to proxy..
 	// TODO: define ingress, service, pod, certmanager with kustomize ??
-	// TODO: cache journal by endpoint, isn't enough one endpoint ?
 	// Consult with Yury, Tim ...
 	return
 }

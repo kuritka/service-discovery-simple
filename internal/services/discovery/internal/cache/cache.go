@@ -12,13 +12,13 @@ import (
 )
 
 type Cache struct {
-	info     CacheInfo
+	info     Info
 	yamlURL  *url.URL
 	cache    map[string]K8gb
 	duration time.Duration
 }
 
-type CacheInfo struct {
+type Info struct {
 	ValidFrom    time.Time
 	RefreshCount int
 }
@@ -27,24 +27,37 @@ type K8gb struct {
 	LastHit          time.Time
 	ValidFrom        time.Time
 	HitCount         int
-	GeoTag           string   `yamlURL:"clusterGeoTag"`
-	ExternalGeoTags  []string `yamlURL:"extGslbClustersGeoTags"`
-	DNSZone          string   `yamlURL:"dnsZone"`
-	EdgeDNSZone      string   `yamlURL:"edgeDNSZone"`
-	EdgeDNSServer    string   `yamlURL:"edgeDNSServer"`
-	IngressNamespace string   `yamlURL:"ingressNamespace"`
+	GeoTag           string   `yaml:"clusterGeoTag"`
+	ExternalGeoTags  []string `yaml:"extGslbClustersGeoTags"`
+	DNSZone          string   `yaml:"dnsZone"`
+	EdgeDNSZone      string   `yaml:"edgeDNSZone"`
+	EdgeDNSServer    string   `yaml:"edgeDNSServer"`
+	IngressNamespace string   `yaml:"ingressNamespace"`
 }
 
 func NewCache(yaml *url.URL) *Cache {
 	return &Cache{
 		cache:    make(map[string]K8gb),
 		duration: time.Hour,
-		info: CacheInfo{
+		info: Info{
 			RefreshCount: 0,
 			ValidFrom:    time.Now(),
 		},
 		yamlURL: yaml,
 	}
+}
+
+func (s *Cache) Get(key string) (k8gb K8gb, err error) {
+	var ok bool
+	if k8gb, ok = s.cache[key]; ok {
+		k8gb.HitCount++
+		k8gb.LastHit = time.Now()
+		k8gb.ValidFrom = s.info.ValidFrom
+		s.cache[key] = k8gb
+		return
+	}
+	err = fmt.Errorf("%s not found", key)
+	return
 }
 
 func (s *Cache) RestoreCache() (err error) {
@@ -74,6 +87,6 @@ func (s *Cache) getYAML() (b []byte, err error) {
 	return
 }
 
-func (s *Cache) Info() CacheInfo {
+func (s *Cache) Info() Info {
 	return s.info
 }
