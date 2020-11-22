@@ -1,20 +1,20 @@
 # k8gb discovery service
 
-multi-cluster k8gb discovery
+multi-cluster k8gb discovery service
 
 ## Project Health
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-## Contents
-tbd
-
-QUATIONS:
- - security? Is that secret solution for PROD ? 
+#### QUESTIONS
+ - security? Is that enough secret for our PROD ? 
  - Can we provide unique key for each GSLB instance ? 
 
 ## Overview
-tbd
+Service provides configuration to particular GSLB instances during GSLB startup.
+This solution is useful if you can't provide various configurations during deployment. 
+
+...
 
 ## Usage
 tbd
