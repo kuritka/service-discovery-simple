@@ -14,10 +14,7 @@ multi-cluster k8gb discovery service
 Service provides configuration to particular GSLB instances during GSLB startup.
 This solution is useful if you can't provide various configurations during deployment. 
 
-...
-
-## Usage
-tbd
+![](https://github.com/kuritka/trash/blob/master/k8gb-discovery-service.png?raw=true)
 
 ### Environment variables
 
