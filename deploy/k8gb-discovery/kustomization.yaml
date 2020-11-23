@@ -1,13 +1,14 @@
 # Adds namespace to all resources.
 namespace: k8gb-discovery
 
-resources:
-#  - tf-module.yaml
-#  - tf-config.yaml
-#  - tf-exec.yaml
-  - k8gb-discovery-ns.yaml
-  - k8gb-discovery-vars.yaml
-  - k8gb-discovery-deployment.yaml
+commonLabels:
+  app: k8gb-discovery
 
+resources:
+  - ns.yaml
+  - vars.yaml
+  - deployment.yaml
+  - service.yaml
+  - ingress.yaml
 
 

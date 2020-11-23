@@ -24,7 +24,7 @@ tbd
 | Name | Description | Default |
 | --- | --- | --- |
 | `K8GB_DISCOVERY_YAML_URL` | (Required) URL to raw yaml configuration | |
-| `K8GB_DISCOVERY_PORT` | (Optional) Service listener port | `8080` |
+| `K8GB_DISCOVERY_EXPOSED_PORT` | (Optional) Service listener port | `8080` |
 | `K8GB_DISCOVERY_DURATION` | (Optional) Duration in case you decide to poll yaml configuration <`3m`; `24h`> |  |
 
 
@@ -57,3 +57,13 @@ test-gslb-eu:
   edgeDNSZone: example.com
   edgeDNSServer: 1.1.1.1
 ```
+
+
+## TODO
+ - [ ] RBAC
+ - [ ] cert-manager
+ - [ ] HELM chart 
+ - [ ] tests coverage
+ - [ ] introduce `done->` channel
+ - [ ] documentation
+ - [ ] run docker under custom user

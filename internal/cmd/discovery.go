@@ -3,6 +3,8 @@ package cmd
 import (
 	"context"
 
+	"github.com/kuritka/k8gb-discovery/internal/common/log"
+
 	"github.com/kuritka/k8gb-discovery/internal/common/depresolver"
 	"github.com/kuritka/k8gb-discovery/internal/common/guard"
 	"github.com/kuritka/k8gb-discovery/internal/common/runner"
@@ -16,6 +18,7 @@ var listenCmd = &cobra.Command{
 	Long:  `based on key: [namespace, cluster] returns k8gb configuration as marshalled json object 🍻🕺`,
 
 	Run: func(cmd *cobra.Command, args []string) {
+		log.Logger().Info("discovery service started")
 		settings, err := depresolver.New().MustResolveDiscovery()
 		guard.FailOnError(err, "resolve input settings")
 		disco := discovery.New(context.Background(), settings)

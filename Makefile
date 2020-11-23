@@ -2,8 +2,7 @@ VERSION ?= 0.0.1
 
 .PHONY: lint
 lint:
-	golangci-lint run
-	go test  ./...
+	$(call lint)
 
 .PHONY: list
 list:
@@ -11,10 +10,35 @@ list:
 
 .PHONY: docker-build
 docker-build:
-	time docker build -t k8gb-discovery:$(VERSION) .
+	$(call docker-build)
 
-.PHONY: clean
-clean:
+.PHONY: check
+check:
 	goimports -l -w ./
 	go generate ./...
 	go mod tidy
+	$(call lint)
+	$(call docker-build)
+
+.PHONY: redeploy
+redeploy:
+	docker build -t docker.io/kuritka/k8gb-discovery:0.0.1 .
+	docker push docker.io/kuritka/k8gb-discovery:0.0.1
+	kubectl delete ns k8gb-discovery
+	kubectl apply -k ./deploy/k8gb-discovery
+
+.PHONY: test-api
+test-api:
+	kubectl run -it --rm busybox --restart=Never --image=busybox -- sh -c \
+	"wget -qO - k8gb-discovery.nonprod.bcp.absa.co.za/metrics"
+#	"echo '172.17.0.9 k8gb-discovery.nonprod.bcp.absa.co.za' > /etc/hosts && \
+#	wget -qO - k8gb-discovery.nonprod.bcp.absa.co.za/healthy"
+
+define lint
+	golangci-lint run
+	go test  ./...
+endef
+
+define docker-build
+	time docker build -t k8gb-discovery:$(VERSION) .
+endef

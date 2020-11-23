@@ -4,25 +4,25 @@ metadata:
   name: k8gb-discovery
   namespace: k8gb-discovery
   labels:
-    app: k8gb-discovery
+    app: overlay.me
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: k8gb-discovery
+      app: overlay.me
   template:
     metadata:
       labels:
-        app: k8gb-discovery
+        app: overlay.me
     spec:
       restartPolicy: Always
       containers:
         - name: k8gb-discovery
-          image: k8gb-discovery:0.0.1
+          image: kuritka/k8gb-discovery:0.0.1
           imagePullPolicy: Always
           env:
-            -  name: K8GB_DISCOVERY_YAML_URL
-               valueFrom:
-                 configMapKeyRef:
-                   name: k8gb-discovery-vars
-                   key: K8GB_DISCOVERY_YAML_URL
+          -  name: K8GB_DISCOVERY_YAML_URL
+             valueFrom:
+               configMapKeyRef:
+                 name: k8gb-discovery-vars
+                 key: K8GB_DISCOVERY_YAML_URL

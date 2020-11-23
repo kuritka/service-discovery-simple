@@ -14,7 +14,7 @@ import (
 )
 
 const (
-	envPortKey = "K8GB_DISCOVERY_PORT"
+	envPortKey = "K8GB_DISCOVERY_EXPOSED_PORT"
 	envYamlKey = "K8GB_DISCOVERY_YAML_URL"
 )
 

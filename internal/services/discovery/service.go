@@ -30,10 +30,6 @@ func (l *Listener) Run() (err error) {
 	}
 	log.Logger().Infof("listening on :%d", l.settings.Port)
 	err = http.ListenAndServe(fmt.Sprintf(":%d", l.settings.Port), c.Router())
-	// TODO: Tests
-	// TODO: channels ?? Look to proxy L7 implementation
-	// TODO: Deployment
-	// TODO: Consult with rest of the team
 	return
 }
 
