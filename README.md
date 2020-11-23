@@ -6,10 +6,6 @@ multi-cluster k8gb discovery service
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-#### QUESTIONS
- - security? Is that enough secret for our PROD ? 
- - Can we provide unique key for each GSLB instance ? 
-
 ## Overview
 Service provides configuration to particular GSLB instances during GSLB startup.
 This solution is useful if you can't provide various configurations during deployment. 
@@ -64,3 +60,8 @@ test-gslb-eu:
  - [ ] introduce `done->` channel
  - [ ] documentation
  - [ ] run docker under custom user
+
+#### QUESTIONS to CLARIFY
+ - Is that enough secure for PROD ? 
+ - Can we provide unique key for each GSLB instance e.g. `test-gslb-us`,`test-gslb-en` ? 
+
