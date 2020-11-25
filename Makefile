@@ -13,6 +13,11 @@ list:
 docker-build:
 	$(call docker-build)
 
+.PHONY: docker-deploy
+docker-deploy:
+	$(call docker-build)
+	docker push docker.io/kuritka/k8gb-discovery:$(VERSION)
+
 .PHONY: check
 check:
 	goimports -l -w ./
@@ -23,8 +28,8 @@ check:
 
 .PHONY: redeploy
 redeploy:
-	docker build -t docker.io/kuritka/k8gb-discovery:0.0.1 .
-	docker push docker.io/kuritka/k8gb-discovery:0.0.1
+	docker build -t docker.io/kuritka/k8gb-discovery:$(VERSION) .
+	docker push docker.io/kuritka/k8gb-discovery:$(VERSION)
 	kubectl delete ns k8gb-discovery
 	kubectl apply -k ./deploy/k8gb-discovery
 

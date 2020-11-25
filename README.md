@@ -65,6 +65,5 @@ make stop
  - [ ] cert-manager
  - [ ] HELM chart 
  - [ ] tests coverage
- - [ ] introduce `done->` channel
- - [ ] documentation
- - [ ] run docker under custom user
+ - [ ] wait for `done->` channel in cache 
+
