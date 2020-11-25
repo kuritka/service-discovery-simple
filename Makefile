@@ -1,4 +1,5 @@
 VERSION ?= 0.0.1
+CLUSTER_NAME ?=k3s-k8gb-disco
 
 .PHONY: lint
 lint:
@@ -26,6 +27,15 @@ redeploy:
 	docker push docker.io/kuritka/k8gb-discovery:0.0.1
 	kubectl delete ns k8gb-discovery
 	kubectl apply -k ./deploy/k8gb-discovery
+
+.PHONY: start
+start:
+	k3d cluster create $(CLUSTER_NAME) --api-port 6550 -p "8081:80@loadbalancer" --agents 3
+	kubectl create ns k8gb-discovery
+
+.PHONY: stop
+stop:
+	k3d cluster delete $(CLUSTER_NAME)
 
 .PHONY: test-api
 test-api:

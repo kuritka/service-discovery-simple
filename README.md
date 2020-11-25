@@ -51,6 +51,14 @@ test-gslb-eu:
   edgeDNSServer: 1.1.1.1
 ```
 
+## local playground
+install local [k3d](https://k3d.io/) and update docker
+```
+make start
+make redeploy
+curl localhost:8081/healthy
+make stop
+```
 
 ## TODO
  - [ ] RBAC
@@ -60,8 +68,3 @@ test-gslb-eu:
  - [ ] introduce `done->` channel
  - [ ] documentation
  - [ ] run docker under custom user
-
-#### QUESTIONS to CLARIFY
- - Is that enough secure for PROD ? 
- - Can we provide unique key for each GSLB instance e.g. `test-gslb-us`,`test-gslb-en` ? 
-

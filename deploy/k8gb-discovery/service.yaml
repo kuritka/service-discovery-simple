@@ -3,12 +3,10 @@ kind: Service
 metadata:
   name: k8gb-discovery
   namespace: k8gb-discovery
-  labels:
-    app: overlay.me
 spec:
+  selector:
+    app: overlay.me
   ports:
     - port: 8080
       protocol: TCP
-      targetPort: 8082
-  selector:
-    app: overlay.me
+      targetPort: 8080
