@@ -37,6 +37,12 @@ redeploy:
 start:
 	k3d cluster create $(CLUSTER_NAME) --api-port 6550 -p "8081:80@loadbalancer" --agents 3
 	kubectl create ns k8gb-discovery
+	kubectl create ns cert-manager
+	kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.1.0/cert-manager.yaml
+	kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.1.0/cert-manager.crds.yaml
+	kubectl get pods --namespace cert-manager
+
+
 
 .PHONY: stop
 stop:

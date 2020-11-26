@@ -52,17 +52,18 @@ test-gslb-eu:
 ```
 
 ## local playground
-install local [k3d](https://k3d.io/) and update docker
+update docker and install local [k3d](https://k3d.io/) 
 ```
+echo "127.0.0.1 disco.example.com" >> /etc/host 
 make start
 make redeploy
-curl localhost:8081/healthy
+curl http://disco.example.com:8081/healthy
+curl https://disco.example.com:8081/healthy
 make stop
 ```
 
 ## TODO
  - [ ] RBAC
- - [ ] cert-manager
  - [ ] HELM chart 
  - [ ] tests coverage
  - [ ] wait for `done->` channel in cache 

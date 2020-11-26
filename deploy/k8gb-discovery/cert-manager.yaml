@@ -1,0 +1,19 @@
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: test-selfsigned
+  namespace: k8gb-discovery
+spec:
+  selfSigned: {}
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: selfsigned-cert
+  namespace: k8gb-discovery
+spec:
+  dnsNames:
+    - disco.example.com
+  secretName: selfsigned-cert-tls
+  issuerRef:
+    name: test-selfsigned

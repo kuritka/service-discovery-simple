@@ -9,4 +9,5 @@ resources:
   - vars.yaml
   - deployment.yaml
   - service.yaml
+  - cert-manager.yaml
   - ingress.yaml
