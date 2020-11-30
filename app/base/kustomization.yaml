@@ -1,4 +1,3 @@
-# Adds namespace to all resources.
 namespace: k8gb-discovery
 
 commonLabels:

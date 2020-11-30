@@ -57,8 +57,8 @@ update docker and install local [k3d](https://k3d.io/)
 echo "127.0.0.1 disco.example.com" >> /etc/hosts 
 make start
 make redeploy
-curl http://disco.example.com:8081/healthy
-curl https://disco.example.com:8081/healthy
+curl http://disco.example.com:8080/healthy
+curl https://disco.example.com:8443/healthy
 make stop
 ```
 

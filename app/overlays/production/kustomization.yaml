@@ -1,0 +1,12 @@
+# Adds namespace to all resources.
+namePrefix: production-
+nameSuffix: -v1
+
+# consider this for PROD images:
+#  images:
+#    - name: package
+#      newTag: v1
+
+bases:
+- ../../base
+
