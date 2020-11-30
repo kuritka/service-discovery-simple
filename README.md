@@ -54,7 +54,7 @@ test-gslb-eu:
 ## local playground
 update docker and install local [k3d](https://k3d.io/) 
 ```
-echo "127.0.0.1 disco.example.com" >> /etc/host 
+echo "127.0.0.1 disco.example.com" >> /etc/hosts 
 make start
 make redeploy
 curl http://disco.example.com:8081/healthy

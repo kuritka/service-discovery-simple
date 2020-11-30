@@ -5,7 +5,7 @@ metadata:
   namespace: k8gb-discovery
   name: k8gb-discovery
   annotations:
-    cert-manager.io/cluster-issuer: disco-selfsigned
+    cert-manager.io/cluster-issuer: test-selfsigned
 spec:
   rules:
     - http:
