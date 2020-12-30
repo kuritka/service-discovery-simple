@@ -31,7 +31,7 @@ redeploy:
 	docker build -t docker.io/kuritka/k8gb-discovery:$(VERSION) .
 	docker push docker.io/kuritka/k8gb-discovery:$(VERSION)
 	kubectl delete ns k8gb-discovery
-	kubectl apply -k ./app/overlays/development
+	kubectl apply -k ./app/base
 
 .PHONY: start
 start:
@@ -49,8 +49,6 @@ stop:
 test-api:
 	kubectl run -it --rm busybox --restart=Never --image=busybox -- sh -c \
 	"wget -qO - k8gb-discovery.nonprod.bcp.absa.co.za/metrics"
-#	"echo '172.17.0.9 k8gb-discovery.nonprod.bcp.absa.co.za' > /etc/hosts && \
-#	wget -qO - k8gb-discovery.nonprod.bcp.absa.co.za/healthy"
 
 define lint
 	golangci-lint run
