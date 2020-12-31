@@ -35,7 +35,7 @@ redeploy:
 
 .PHONY: start
 start:
-	k3d cluster create $(CLUSTER_NAME) --api-port 6550 -p "8080:80@loadbalancer"  -p "8443:443@loadbalancer" --agents 1
+	k3d cluster create $(CLUSTER_NAME) --api-port 6550 -p "8080:80@loadbalancer"  -p "8443:443@loadbalancer" --agents 1 --k3s-server-arg "--no-deploy=traefik,metrics-server"
 	kubectl create ns k8gb-discovery
 	kubectl create ns cert-manager
 	kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.1.0/cert-manager.yaml
