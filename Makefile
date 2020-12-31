@@ -45,6 +45,9 @@ start:
 stop:
 	k3d cluster delete $(CLUSTER_NAME)
 
+.PHONY: reset
+reset: stop start
+
 .PHONY: test-api
 test-api:
 	kubectl run -it --rm busybox --restart=Never --image=busybox -- sh -c \
