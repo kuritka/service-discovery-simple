@@ -4,9 +4,9 @@ commonLabels:
   app: k8gb-discovery
 
 resources:
-  - ns.yaml
+#  - ns.yaml
   - vars.yaml
   - deployment.yaml
   - service.yaml
   - cert-manager.yaml
-  - ingress.yaml
+  - ingress-https.yaml

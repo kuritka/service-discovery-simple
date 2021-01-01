@@ -2,10 +2,10 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: k8gb-discovery
+  name: k8gb-discovery-https
   annotations:
-    cert-manager.io/cluster-issuer: test-selfsigned
     kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: test-selfsigned
 spec:
   rules:
     - http:
