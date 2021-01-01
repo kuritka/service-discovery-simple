@@ -30,13 +30,12 @@ check:
 redeploy:
 	docker build -t docker.io/kuritka/k8gb-discovery:$(VERSION) .
 	docker push docker.io/kuritka/k8gb-discovery:$(VERSION)
-	kubectl delete ns k8gb-discovery
 	kubectl apply -k ./app/base
 
 .PHONY: start
 start:
-	k3d cluster create $(CLUSTER_NAME) --api-port 6550 -p "8080:80@loadbalancer"  -p "8443:443@loadbalancer" --agents 1
-	kubectl create ns k8gb-discovery
+	#k3d cluster create $(CLUSTER_NAME) --agents 1 --no-lb --k3s-server-arg "--no-deploy=traefik,servicelb,metrics-server"
+	k3d cluster create $(CLUSTER_NAME) --agents 1 -p "8443:443@loadbalancer" -p "8080:80@loadbalancer" --k3s-server-arg "--no-deploy=metrics-server"
 	kubectl create ns cert-manager
 	kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.1.0/cert-manager.yaml
 	kubectl -n cert-manager wait --for=condition=Ready pod -l app.kubernetes.io/instance=cert-manager --timeout=30s
@@ -46,7 +45,7 @@ stop:
 	k3d cluster delete $(CLUSTER_NAME)
 
 .PHONY: reset
-reset: stop start
+reset: stop start redeploy
 
 .PHONY: test-api
 test-api:

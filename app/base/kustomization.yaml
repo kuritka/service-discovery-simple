@@ -9,4 +9,4 @@ resources:
   - deployment.yaml
   - service.yaml
   - cert-manager.yaml
-  - ingress.yaml
+  - ingress-https.yaml

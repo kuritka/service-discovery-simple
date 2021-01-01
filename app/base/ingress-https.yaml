@@ -2,8 +2,9 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: k8gb-discovery
+  name: k8gb-discovery-https
   annotations:
+    kubernetes.io/ingress.class: traefik
     cert-manager.io/cluster-issuer: test-selfsigned
 spec:
   rules:
@@ -19,4 +20,4 @@ spec:
   tls: # < placing a host in the TLS config will indicate a certificate should be created
     - hosts:
         - disco.example.com
-      secretName: selfsigned-cert-tls # < cert-manager will store the created certificate in this secret.
+    - secretName: selfsigned-cert-tls # < cert-manager will store the created certificate in this secret.

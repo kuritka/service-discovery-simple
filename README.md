@@ -1,13 +1,10 @@
-# k8gb discovery service
-
-multi-cluster k8gb discovery service
-
-## Project Health
-
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+# discovery service demo
+We need to build security into the architecture from day one. Sensitive information must be encrypted and test. 
+Following demo presents usage of [cert manager](https://cert-manager.io/docs/) and [sealed secrets](https://github.com/bitnami-labs/sealed-secrets).
+The demo runs web application on the top of [k3d](https://k3d.io/) and intentionally provides functionality on http and https.
 
 ## Overview
-Service provides configuration to particular GSLB instances during GSLB startup.
+Service provides configuration to particular [GSLB instances](https://github.com/AbsaOSS/k8gb) during GSLB startup.
 This solution is useful if you can't provide various configurations during deployment. 
 
 ![](https://github.com/kuritka/trash/blob/master/k8gb-discovery-service.png?raw=true)
@@ -19,7 +16,6 @@ This solution is useful if you can't provide various configurations during deplo
 | `K8GB_DISCOVERY_YAML_URL` | (Required) URL to raw yaml configuration | |
 | `K8GB_DISCOVERY_EXPOSED_PORT` | (Optional) Service listener port | `8080` |
 | `K8GB_DISCOVERY_DURATION` | (Optional) Duration in case you decide to poll yaml configuration <`3m`; `24h`> |  |
-
 
 ### REST-API
 
@@ -52,11 +48,15 @@ test-gslb-eu:
 ```
 
 ## local playground
-update docker and install local [k3d](https://k3d.io/) 
+bump docker version to the latest and install local [k3d](https://k3d.io/).
+Certificate manager generates self-signed certificate `*.example.com` the transfered data is still sent encrypted, 
+but `curl https://...` will require `-k/--insecure` argument which will "only make" curl skip certificate validation, 
+it will not turn off SSL all together. depending on browser you will need to skip 
+[NET::ERR_CERT_INVALID](https://www.pandasecurity.com/en/mediacenter/panda-security/your-connection-is-not-private/)
+error.
 ```
 echo "127.0.0.1 disco.example.com" >> /etc/hosts 
-make start
-make redeploy
+make reset
 curl http://disco.example.com:8080/healthy
 curl https://disco.example.com:8443/healthy
 make stop
@@ -65,6 +65,6 @@ make stop
 ## TODO
  - [ ] RBAC
  - [ ] HELM chart 
- - [ ] tests coverage
- - [ ] wait for `done->` channel in cache 
+ - [ ] cert
+
 
