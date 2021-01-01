@@ -34,18 +34,15 @@ redeploy:
 
 .PHONY: start
 start:
-	k3d cluster create $(CLUSTER_NAME) --api-port 6550 --agents 1 --k3s-server-arg "--no-deploy=traefik,servicelb,metrics-server"
+	#k3d cluster create $(CLUSTER_NAME) --agents 1 --no-lb --k3s-server-arg "--no-deploy=traefik,servicelb,metrics-server"
+	k3d cluster create $(CLUSTER_NAME) --agents 1 -p "8080:80@loadbalancer"  -p "8443:443@loadbalancer" --k3s-server-arg "--no-deploy=traefik,metrics-server"
 	kubectl create ns k8gb-discovery
 	helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
 	helm repo update
-#	helm install nginx ingress-nginx/ingress-nginx --namespace k8gb-discovery --set controller.service.ports.http=8080 --set controller.service.ports.https=8443
-#	helm install nginx ingress-nginx/ingress-nginx --namespace k8gb-discovery --set controller.hostPort.enabled=true controller.hostPort.ports.http=8080 --set controller.hostPort.ports.https=8443
 	helm upgrade -i nginx ingress-nginx/ingress-nginx --namespace k8gb-discovery -f app/values.yaml
 	kubectl create ns cert-manager
 	kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.1.0/cert-manager.yaml
 	kubectl -n cert-manager wait --for=condition=Ready pod -l app.kubernetes.io/instance=cert-manager --timeout=30s
-
-
 
 .PHONY: stop
 stop:
