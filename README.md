@@ -51,7 +51,7 @@ test-gslb-eu:
 bump docker version to the latest and install local [k3d](https://k3d.io/).
 Certificate manager generates self-signed certificate `*.example.com` the transfered data is still sent encrypted, 
 but `curl https://...` will require `-k/--insecure` argument which will "only make" curl skip certificate validation, 
-it will not turn off SSL all together. depending on browser you will need to skip 
+it will not turn off SSL all together. depending on a browser you will need to skip 
 [NET::ERR_CERT_INVALID](https://www.pandasecurity.com/en/mediacenter/panda-security/your-connection-is-not-private/)
 error.
 ```
