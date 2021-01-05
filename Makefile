@@ -52,6 +52,21 @@ test-api:
 	kubectl run -it --rm busybox --restart=Never --image=busybox -- sh -c \
 	"wget -qO - k8gb-discovery.nonprod.bcp.absa.co.za/metrics"
 
+.PHONY: install-seal-secret
+install-seal-secret:
+	openssl genrsa -out sealed-secrets/sealed-disco.example.com.pem 2048
+	chmod 400 sealed-secrets/sealed-disco.example.com.pem
+	openssl req -new -key sealed-secrets/sealed-disco.example.com.pem -out sealed-secrets/sealed-disco.example.com.csr -config sealed-secrets/sealed-disco.example.com.cnf
+	openssl x509 -req -days 3650 -in sealed-secrets/sealed-disco.example.com.csr -signkey sealed-secrets/sealed-disco.example.com.pem -out sealed-secrets/sealed-disco.example.com.crt
+
+
+.PHONY: sealed-secrets
+sealed-secrets:
+	echo -n secret-mesage | kubectl create secret generic mysecret --dry-run=client --from-file=secret-file=/dev/stdin -o json > disco-secret.json
+	kubeseal <disco-secret > disco-sealed-secret.json
+	kubectl create -f disco-sealed-secret.json
+	kubectl get secret disco-secret
+
 define lint
 	golangci-lint run
 	go test  ./...
