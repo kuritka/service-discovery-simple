@@ -16,6 +16,7 @@ import (
 const (
 	envPortKey = "K8GB_DISCOVERY_EXPOSED_PORT"
 	envYamlKey = "K8GB_DISCOVERY_YAML_URL"
+	envSealedSecret = "SECRET_INFORMATION"
 )
 
 type DepResolver struct {
@@ -43,6 +44,7 @@ func (dr *DepResolver) MustResolveDiscovery() (s discovery.Settings, err error) 
 		}
 		dr.discovery.settings.YamlURL, err = url.Parse(yamlURL)
 		e = multierror.Append(e, err)
+		dr.discovery.settings.SealedSecret = env.GetEnvAsStringOrFallback(envSealedSecret,"secret "+envSealedSecret+" not found!")
 	})
 	return dr.discovery.settings, e.ErrorOrNil()
 }

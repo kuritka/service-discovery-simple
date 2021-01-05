@@ -10,3 +10,4 @@ resources:
   - service.yaml
   - cert-manager.yaml
   - ingress-https.yaml
+  - sealed-secret.yaml

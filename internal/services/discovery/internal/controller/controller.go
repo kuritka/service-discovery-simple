@@ -26,11 +26,13 @@ func init() {
 
 type DiscoController struct {
 	cache *cache.Cache
+	sealedSecret string
 }
 
-func Startup(yamlURL *url.URL) (ctrl *DiscoController, err error) {
+func Startup(yamlURL *url.URL, sealedSecret string) (ctrl *DiscoController, err error) {
 	ctrl = &DiscoController{
 		cache: cache.NewCache(yamlURL),
+		sealedSecret: sealedSecret,
 	}
 	ctrl.registerRoutes()
 	log.Logger().Infof("restoring cache from %s", yamlURL.String())
@@ -47,6 +49,7 @@ func (c *DiscoController) Router() *httprouter.Router {
 
 func (c *DiscoController) registerRoutes() {
 	// registerRoutes routes here
+	router.GET("/sealed-secret", c.handleSealedSecret)
 	router.GET("/healthy", c.handleHealthy)
 	router.GET("/restore", c.handleRestore)
 	router.GET("/discover/:key", c.handleDiscovery)
@@ -66,6 +69,10 @@ func (c *DiscoController) handleHealthy(w http.ResponseWriter, _ *http.Request, 
 	_, _ = fmt.Fprintf(w, "healthy")
 }
 
+func (c *DiscoController) handleSealedSecret(w http.ResponseWriter, _ *http.Request, _ httprouter.Params) {
+	_, _ = fmt.Fprintf(w, c.sealedSecret)
+}
+
 func (c *DiscoController) handleDiscovery(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 	key := p.ByName("key")
 	k8gb, err := c.cache.Get(key)
@@ -77,7 +84,7 @@ func (c *DiscoController) handleDiscovery(w http.ResponseWriter, r *http.Request
 	guard.HandleErrorWithInternalServerError(w, r, err, "retrieving info")
 }
 
-func (c *DiscoController) handleMetrics(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+func (c *DiscoController) handleMetrics(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	w.Header().Set("Content-Type", "application/json")
 	err := json.NewEncoder(w).Encode(c.cache.Info())
 	guard.HandleErrorWithInternalServerError(w, r, err, "retrieving info")

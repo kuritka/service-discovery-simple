@@ -25,3 +25,8 @@ spec:
                configMapKeyRef:
                  name: k8gb-discovery-vars
                  key: K8GB_DISCOVERY_YAML_URL
+          - name: SECRET_INFORMATION
+            valueFrom:
+              secretKeyRef:
+                name: disco-secret
+                key: secret

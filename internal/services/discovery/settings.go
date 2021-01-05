@@ -8,4 +8,6 @@ type Settings struct {
 	Port int
 	// URL to yaml file in GitHub repo
 	YamlURL *url.URL
+	//Sealed secret
+	SealedSecret string
 }

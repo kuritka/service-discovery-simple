@@ -34,11 +34,10 @@ redeploy:
 
 .PHONY: start
 start:
-	#k3d cluster create $(CLUSTER_NAME) --agents 1 --no-lb --k3s-server-arg "--no-deploy=traefik,servicelb,metrics-server"
 	k3d cluster create $(CLUSTER_NAME) --agents 1 -p "8443:443@loadbalancer" -p "8080:80@loadbalancer" --k3s-server-arg "--no-deploy=metrics-server"
 	kubectl create ns cert-manager
 	kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.1.0/cert-manager.yaml
-	kubectl -n cert-manager wait --for=condition=Ready pod -l app.kubernetes.io/instance=cert-manager --timeout=30s
+	kubectl -n cert-manager wait --for=condition=Ready pod -l app.kubernetes.io/instance=cert-manager --timeout=50s
 
 .PHONY: stop
 stop:
@@ -52,7 +51,7 @@ test-api:
 	kubectl run -it --rm busybox --restart=Never --image=busybox -- sh -c \
 	"wget -qO - k8gb-discovery.nonprod.bcp.absa.co.za/metrics"
 
-.PHONY: install-seal-secret
+.PHONY: certificates
 install-seal-secret:
 	openssl genrsa -out sealed-secrets/certs/sealed-disco.example.com.pem 2048
 	chmod 400 sealed-secrets/certs/sealed-disco.example.com.pem
@@ -63,8 +62,8 @@ install-seal-secret:
 sealed-secrets:
 	kubectl apply -f https://github.com/bitnami-labs/sealed-secrets/releases/download/v0.12.4/controller.yaml
 	echo "This is a secret!" | kubectl create secret generic disco-secret -n k8gb-discovery --dry-run=client --from-file=secret=/dev/stdin -o yaml > sealed-secrets/disco-secret.yaml
-	kubeseal --format yaml <sealed-secrets/disco-secret.yaml >sealed-secrets/disco-sealed-secret.yaml
-	kubectl apply -f sealed-secrets/disco-sealed-secret.yaml
+	kubeseal --format yaml <sealed-secrets/disco-secret.yaml >app/base/sealed-secret.yaml
+	kubectl apply -f app/base/sealed-secret.yaml
 	@echo only sealed-secret goes to github, no secret
 	@echo writing installed secret down:
 	kubectl get secret disco-secret -n k8gb-discovery -o jsonpath="{.data.secret}" | base64 --decode

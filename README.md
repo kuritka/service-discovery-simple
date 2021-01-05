@@ -59,7 +59,8 @@ error.
 echo "127.0.0.1 disco.example.com" >> /etc/hosts 
 make reset
 curl http://disco.example.com:8080/healthy
-curl https://disco.example.com:8443/healthy
+curl --insecure https://disco.example.com:8443/healthy
+curl --insecure https://disco.example.com:8443/sealed-secret
 make stop
 ```
 
