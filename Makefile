@@ -54,18 +54,20 @@ test-api:
 
 .PHONY: install-seal-secret
 install-seal-secret:
-	openssl genrsa -out sealed-secrets/sealed-disco.example.com.pem 2048
-	chmod 400 sealed-secrets/sealed-disco.example.com.pem
-	openssl req -new -key sealed-secrets/sealed-disco.example.com.pem -out sealed-secrets/sealed-disco.example.com.csr -config sealed-secrets/sealed-disco.example.com.cnf
-	openssl x509 -req -days 3650 -in sealed-secrets/sealed-disco.example.com.csr -signkey sealed-secrets/sealed-disco.example.com.pem -out sealed-secrets/sealed-disco.example.com.crt
-
+	openssl genrsa -out sealed-secrets/certs/sealed-disco.example.com.pem 2048
+	chmod 400 sealed-secrets/certs/sealed-disco.example.com.pem
+	openssl req -new -key sealed-secrets/certs/sealed-disco.example.com.pem -out sealed-secrets/certs/sealed-disco.example.com.csr -config sealed-secrets/certs/sealed-disco.example.com.cnf
+	openssl x509 -req -days 3650 -in sealed-secrets/certs/sealed-disco.example.com.csr -signkey sealed-secrets/certs/sealed-disco.example.com.pem -out sealed-secrets/certs/sealed-disco.example.com.crt
 
 .PHONY: sealed-secrets
 sealed-secrets:
-	echo -n secret-mesage | kubectl create secret generic mysecret --dry-run=client --from-file=secret-file=/dev/stdin -o json > disco-secret.json
-	kubeseal <disco-secret > disco-sealed-secret.json
-	kubectl create -f disco-sealed-secret.json
-	kubectl get secret disco-secret
+	kubectl apply -f https://github.com/bitnami-labs/sealed-secrets/releases/download/v0.12.4/controller.yaml
+	echo "This is a secret!" | kubectl create secret generic disco-secret -n k8gb-discovery --dry-run=client --from-file=secret=/dev/stdin -o yaml > sealed-secrets/disco-secret.yaml
+	kubeseal --format yaml <sealed-secrets/disco-secret.yaml >sealed-secrets/disco-sealed-secret.yaml
+	kubectl apply -f sealed-secrets/disco-sealed-secret.yaml
+	@echo only sealed-secret goes to github, no secret
+	@echo writing installed secret down:
+	kubectl get secret disco-secret -n k8gb-discovery -o jsonpath="{.data.secret}" | base64 --decode
 
 define lint
 	golangci-lint run
