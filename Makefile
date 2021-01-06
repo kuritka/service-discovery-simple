@@ -30,14 +30,18 @@ check:
 redeploy:
 	docker build -t docker.io/kuritka/k8gb-discovery:$(VERSION) .
 	docker push docker.io/kuritka/k8gb-discovery:$(VERSION)
+	#new instance of cluster requires to regenerate sealed secret, TODO: should be executed within start
+	kubeseal --format yaml <sealed-secrets/disco-secret.yaml >app/base/sealed-secret.yaml
 	kubectl apply -k ./app/base
 
 .PHONY: start
 start:
 	k3d cluster create $(CLUSTER_NAME) --agents 1 -p "8443:443@loadbalancer" -p "8080:80@loadbalancer" --k3s-server-arg "--no-deploy=metrics-server"
+	kubectl apply -f https://github.com/bitnami-labs/sealed-secrets/releases/download/v0.12.4/controller.yaml
 	kubectl create ns cert-manager
 	kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.1.0/cert-manager.yaml
 	kubectl -n cert-manager wait --for=condition=Ready pod -l app.kubernetes.io/instance=cert-manager --timeout=50s
+
 
 .PHONY: stop
 stop:
@@ -62,8 +66,9 @@ install-seal-secret:
 sealed-secrets:
 	kubectl apply -f https://github.com/bitnami-labs/sealed-secrets/releases/download/v0.12.4/controller.yaml
 	echo "This is a secret!" | kubectl create secret generic disco-secret -n k8gb-discovery --dry-run=client --from-file=secret=/dev/stdin -o yaml > sealed-secrets/disco-secret.yaml
-	kubeseal --format yaml <sealed-secrets/disco-secret.yaml >app/base/sealed-secret.yaml
-	kubectl apply -f app/base/sealed-secret.yaml
+	# sealed-secret depends on cluster instance. You change cluster, so you need refresh sealed secret
+	kubeseal --format yaml <sealed-secrets/disco-secret.yaml >sealed-secrets/sealed-secret.yaml
+	kubectl apply -f sealed-secrets/sealed-secret.yaml
 	@echo only sealed-secret goes to github, no secret
 	@echo writing installed secret down:
 	kubectl get secret disco-secret -n k8gb-discovery -o jsonpath="{.data.secret}" | base64 --decode

@@ -6,8 +6,8 @@ commonLabels:
 resources:
   - ns.yaml
   - vars.yaml
+  - sealed-secret.yaml
   - deployment.yaml
   - service.yaml
   - cert-manager.yaml
   - ingress-https.yaml
-  - sealed-secret.yaml

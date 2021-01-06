@@ -61,6 +61,8 @@ make reset
 curl http://disco.example.com:8080/healthy
 curl --insecure https://disco.example.com:8443/healthy
 curl --insecure https://disco.example.com:8443/sealed-secret
+#Check in browser. For the Chrome you have to type "thisisunsafe"
+https://disco.example.com:8443/sealed-secret 
 make stop
 ```
 
