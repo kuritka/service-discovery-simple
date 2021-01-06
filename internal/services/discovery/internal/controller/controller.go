@@ -25,13 +25,13 @@ func init() {
 }
 
 type DiscoController struct {
-	cache *cache.Cache
+	cache        *cache.Cache
 	sealedSecret string
 }
 
 func Startup(yamlURL *url.URL, sealedSecret string) (ctrl *DiscoController, err error) {
 	ctrl = &DiscoController{
-		cache: cache.NewCache(yamlURL),
+		cache:        cache.NewCache(yamlURL),
 		sealedSecret: sealedSecret,
 	}
 	ctrl.registerRoutes()
