@@ -2,7 +2,7 @@
 We need to build security into the architecture from day one. Sensitive information must be encrypted and test. 
 Following demo presents usage of [cert manager](https://cert-manager.io/docs/) and [sealed secrets](https://github.com/bitnami-labs/sealed-secrets)
 (maybe [medium article](https://medium.com/better-programming/encrypting-kubernetes-secrets-with-sealed-secrets-fe363149a211) is better).
-The demo runs web application on the top of [k3d](https://k3d.io/) and intentionally provides functionality on http and https.
+The demo runs REST application on the top of [k3d](https://k3d.io/) and intentionally provides functionality on http and https.
 
 ## Overview
 Service provides configuration to particular [GSLB instances](https://github.com/AbsaOSS/k8gb) during GSLB startup.
