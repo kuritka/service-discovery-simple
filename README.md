@@ -74,5 +74,6 @@ make sealed-secrets
 
 ## TODO
  - [ ] RBAC
+ - [ ] sealed secret based on static certificate instead of cluster cert (currently need to regenerate sealed secret per each cluster start)
 
 
