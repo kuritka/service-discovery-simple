@@ -6,7 +6,7 @@ The demo runs REST application on the top of [k3d](https://k3d.io/) and intentio
 All is written in GO / k8s
 
 ## Overview
-Service provides configuration to particular [GSLB instances](https://github.com/AbsaOSS/k8gb) during GSLB startup.
+Service provides configuration to particular [k8gb instances](https://github.com/AbsaOSS/k8gb) during GSLB startup.
 This solution is useful if you can't provide various configurations during deployment. 
 
 ![](https://github.com/kuritka/trash/blob/master/k8gb-discovery-service.png?raw=true)
