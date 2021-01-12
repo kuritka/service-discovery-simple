@@ -56,7 +56,7 @@ but `curl https://...` will require `-k/--insecure` argument which will "only ma
 it will not turn off SSL all together. depending on a browser you will need to skip 
 [NET::ERR_CERT_INVALID](https://www.pandasecurity.com/en/mediacenter/panda-security/your-connection-is-not-private/)
 error.
-```
+```shell script
 echo "127.0.0.1 disco.example.com" >> /etc/hosts 
 make reset
 curl http://disco.example.com:8080/healthy
