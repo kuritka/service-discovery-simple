@@ -37,6 +37,7 @@ redeploy:
 .PHONY: start
 start:
 	k3d cluster create $(CLUSTER_NAME) --agents 1 -p "8443:443@loadbalancer" -p "8080:80@loadbalancer" --k3s-server-arg "--no-deploy=metrics-server"
+	#k3d cluster create --config=k3d-config.yaml
 	kubectl apply -f https://github.com/bitnami-labs/sealed-secrets/releases/download/v0.12.4/controller.yaml
 	kubectl create ns cert-manager
 	kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.1.0/cert-manager.yaml
