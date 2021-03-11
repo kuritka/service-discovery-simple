@@ -1,6 +1,6 @@
 module github.com/kuritka/k8gb-discovery
 
-go 1.15
+go 1.16
 
 require (
 	github.com/AbsaOSS/gopkg v0.0.1

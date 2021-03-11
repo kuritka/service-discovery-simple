@@ -1,4 +1,4 @@
-FROM golang:1.15.3-alpine3.12 as build
+FROM golang:1.16.1-alpine3.13 as build
 WORKDIR /build
 ENV CGO_ENABLED=0
 ENV USER=disco
