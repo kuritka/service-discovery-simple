@@ -9,14 +9,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       # see: https://golangci-lint.run/usage/configuration/#config-file
-      - name: golangci-lint
-        uses: golangci/golangci-lint-action@v2
-        with:
-          version: v1.32
-      - name: go test
-        run: go test ./...
       - name: k3d-action-test
         run: |
-          curl --silent --fail https://raw.githubusercontent.com/rancher/k3d/main/install.sh | TAG=v4.4.1 bash
-          k3d cluster create k3d-action --wait --agents 1 --no-lb --verbose
+          curl --silent --fail https://raw.githubusercontent.com/rancher/k3d/main/install.sh | TAG=v4.4.6 bash
+          k3d cluster create k3d-action --wait --agents 1 --no-lb
 
