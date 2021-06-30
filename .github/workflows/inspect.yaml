@@ -15,5 +15,15 @@ jobs:
           version: v1.32
       - name: go test
         run: go test ./...
-
-
+      - name: k3d-action-test
+        uses: AbsaOSS/k3d-action@v1.4.0
+        with:
+          cluster-name: "test"
+          args: >-
+            -p "80:80@agent[0]"
+            -p "443:443@agent[0]"
+            -p "5053:53/udp@agent[0]"
+            --agents 1
+            --no-lb
+            --network k3d-action-bridge-network
+            --k3s-server-arg "--no-deploy=traefik,servicelb,metrics-server"
