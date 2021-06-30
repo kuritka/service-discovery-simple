@@ -5,7 +5,7 @@ on:
 jobs:
   go-inspect:
     name: Inspect
-    runs-on: macos-11
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       # see: https://golangci-lint.run/usage/configuration/#config-file
@@ -16,11 +16,5 @@ jobs:
       - name: go test
         run: go test ./...
       - name: k3d-action-test
-        uses: AbsaOSS/k3d-action@v1.2.0
-        with:
-          cluster-name: "test"
-          args: >-
-            --agents 1
-            --no-lb
-            --network k3d-action-bridge-network
-            --k3s-server-arg "--no-deploy=traefik,servicelb,metrics-server"
+        run: k3d cluster create k3d-action --wait --agents 1 --no-lb --k3s-server-arg "--no-deploy=traefik,servicelb,metrics-server"
+
