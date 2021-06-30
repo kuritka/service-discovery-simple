@@ -16,7 +16,7 @@ jobs:
       - name: go test
         run: go test ./...
       - name: k3d-action-test
-        uses: AbsaOSS/k3d-action@v1.4.0
+        uses: AbsaOSS/k3d-action@v1.2.0
         with:
           cluster-name: "test"
           args: >-
