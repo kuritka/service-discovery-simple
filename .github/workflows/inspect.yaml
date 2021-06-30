@@ -18,5 +18,5 @@ jobs:
       - name: k3d-action-test
         run: |
           curl --silent --fail https://raw.githubusercontent.com/rancher/k3d/main/install.sh | TAG=v4.4.1 bash
-          k3d cluster create k3d-action --wait --agents 1 --no-lb
+          k3d cluster create k3d-action --wait --agents 1 --no-lb --verbose
 
