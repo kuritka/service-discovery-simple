@@ -5,13 +5,13 @@ on:
 jobs:
   go-inspect:
     name: Inspect
-    runs-on: ubuntu-20.04 #ubuntu-18.04
+    runs-on: ubuntu-18.04 #ubuntu-18.04
     steps:
       - uses: actions/checkout@v2
       # see: https://golangci-lint.run/usage/configuration/#config-file
       - name: k3d-action-test
         run: |
-          docker network create --driver=bridge --subnet="172.21.0.0/16" bbb
+          docker network create --driver=bridge --subnet="192.168.0.0/16" bbb
           docker network inspect bbb
           curl --silent --fail https://raw.githubusercontent.com/rancher/k3d/main/install.sh | TAG=v4.4.6 bash
           k3d cluster create k3d-action --wait --agents 1 --no-lb --network=bbb
