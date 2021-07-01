@@ -11,6 +11,6 @@ jobs:
       # see: https://golangci-lint.run/usage/configuration/#config-file
       - name: k3d-action-test
         run: |
-          docker network create --driver=bridge --subnet="172.20.0.0/24" "k3d-action-bridge-network"
+          docker network create --driver=bridge --subnet="192.168.0.0/16" "k3d-action-bridge-network"
           curl --silent --fail https://raw.githubusercontent.com/rancher/k3d/main/install.sh | TAG=v4.4.6 bash
           k3d cluster create k3d-action --wait --agents 1 --no-lb --network=192.168.0.0/16
