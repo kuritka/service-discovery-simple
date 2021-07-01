@@ -13,4 +13,7 @@ jobs:
         run: |
           docker network create --driver=bridge --subnet="172.21.0.0/16" bbb
           docker network inspect bbb
+          curl --silent --fail https://raw.githubusercontent.com/rancher/k3d/main/install.sh | TAG=v4.4.6 bash
+          k3d cluster create k3d-action --wait --agents 1 --no-lb --network=bbb
+          docker network inspect bbb
 
